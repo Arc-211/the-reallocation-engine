@@ -42,7 +42,7 @@ Run it (writes the log and report into `course/2026fa/submissions/Arc-211/runs/t
 node scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/triage.mjs --as-of 2026-10-01
 ```
 
-Offline tests (fixtures plus the real scorer; 17 cases, including every named failure):
+Offline tests (fixtures plus the real scorer; 18 cases, including every named failure):
 
 ```bash
 node --test scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/triage.test.mjs

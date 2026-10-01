@@ -175,3 +175,10 @@ it is the median across **all** sponsored titles at that company, not the data r
   completed, but the three proposed additions remain typed TODOs, and the lifecycle requires
   zero open TODOs before SPECIFIED. Run-log entry `logs/runs/2026fa-Arc-211-1.md` added, with
   G4 reviewer confirmation and the G5 decision marked pending.
+- **2026-10-01 — G5 and break tests.** Student decided: apply to all four scored companies,
+  overriding `review-role-fit` for SoFi (reason recorded in the run log). Deliberate breaks:
+  after-deadline date, missing input, SOC typo, company typo — saved in `runs/breaks/`. The
+  after-deadline break exposed a bug: unchecked companies were still sent to
+  `check-posting-by-hand` when the timeline gate was closed. Fixed and tested. Error messages
+  also printed an absolute local path; now repo-relative. A misspelled company name is
+  indistinguishable from a truly absent one — left as a documented limitation.

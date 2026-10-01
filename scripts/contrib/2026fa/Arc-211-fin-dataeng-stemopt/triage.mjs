@@ -57,16 +57,16 @@ function parseCsv(text) {
 }
 
 function readCsv(p, required) {
-  if (!fs.existsSync(p)) die(2, `G1 input missing: ${p}`);
+  if (!fs.existsSync(p)) die(2, `G1 input missing: ${path.relative(REPO, p)}`);
   const { head, rows } = parseCsv(fs.readFileSync(p, 'utf8'));
   const missing = required.filter((c) => !head.includes(c));
-  if (missing.length) die(2, `G1 ${p} lacks required column(s): ${missing.join(', ')}`);
+  if (missing.length) die(2, `G1 ${path.relative(REPO, p)} lacks required column(s): ${missing.join(', ')}`);
   return rows;
 }
 
 // ── load config + inputs (gate G1) ───────────────────────────────────────────
 const cfgPath = path.resolve(arg('--config', path.join(HERE, 'config.json')));
-if (!fs.existsSync(cfgPath)) die(2, `G1 config missing: ${cfgPath}`);
+if (!fs.existsSync(cfgPath)) die(2, `G1 config missing: ${path.relative(REPO, cfgPath)}`);
 const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
 const rel = (p) => (p == null ? null : path.resolve(REPO, p)); // config paths are repo-root relative
 const asOf = day(arg('--as-of', cfg.as_of || iso(new Date())));
@@ -79,7 +79,7 @@ const sponsorsAll = readCsv(rel(cfg.paths.sponsors_csv), CSV_COLS);
 const bls = readCsv(rel(cfg.paths.bls_csv), ['onet_soc_code', 'title', 'oews_year', 'annual_median_wage']);
 
 const formdDir = rel(cfg.paths.formd_dir);
-if (!fs.existsSync(formdDir)) die(2, `G1 Form D directory missing: ${formdDir}`);
+if (!fs.existsSync(formdDir)) die(2, `G1 Form D directory missing: ${path.relative(REPO, formdDir)}`);
 const formd = new Map(); const formdFiles = [];
 for (const f of fs.readdirSync(formdDir).filter((x) => x.endsWith('.json')).sort()) {
   const d = JSON.parse(fs.readFileSync(path.join(formdDir, f), 'utf8'));
@@ -212,6 +212,9 @@ const evaluated = candidates.map(({ name, row }) => {
       : v(ev.status, L.input, `manual claim ${ev.checked_on || ''}`.trim());
 
   if (e.salary.check === 'below-floor') return { ...e, status: 'below-floor', next_action: 'skip' };
+  // a closed timeline gate stops everything — no point checking postings that cannot be taken
+  if (tl.factor === 0 && (!lv || lv.result === 'uncertain')) return { ...e, status: 'timeline-closed', next_action: 'skip',
+    note: `timeline gate closed (${tl.reason}) — not worth checking the posting` };
   if (!lv || lv.result === 'uncertain') return { ...e, status: 'needs-liveness-check', next_action: 'check-posting-by-hand',
     note: lv ? 'liveness result was uncertain' : 'no liveness check recorded — not sent to the scorer (it would default to 1.0)' };
   return { ...e, status: 'scored' };

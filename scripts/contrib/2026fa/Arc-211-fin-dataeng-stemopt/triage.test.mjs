@@ -164,3 +164,11 @@ test('E-Verify: a transcribed e-verify.gov lookup is a record; a bare claim stay
   assert.equal(row(log, 'EXAMPLE LEDGER INC').everify.label, 'record');
   assert.equal(row(log, 'EXAMPLE BANK CORP').everify.label, 'your-input');
 });
+
+test('closed timeline gate: unchecked postings are skipped too, not sent for a manual check', () => {
+  const { log } = run({}, ['--as-of', '2027-03-01']);
+  const e = row(log, 'EXAMPLE CREDIT INC'); // no liveness entry
+  assert.equal(e.status, 'timeline-closed');
+  assert.equal(e.next_action, 'skip');
+  assert.ok(!log.results.some((x) => x.next_action === 'check-posting-by-hand'));
+});

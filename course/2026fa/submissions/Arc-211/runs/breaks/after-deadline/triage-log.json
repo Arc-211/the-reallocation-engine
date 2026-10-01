@@ -1,7 +1,7 @@
 {
   "_tool": "Arc-211-fin-dataeng-stemopt/triage.mjs",
-  "generated": "2026-10-01T21:04:21.947Z",
-  "as_of": "2026-10-01",
+  "generated": "2026-10-01T21:05:31.908Z",
+  "as_of": "2027-03-01",
   "config": "scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/config.json",
   "inputs": {
     "sponsors_csv": "data/80-days-to-stay/80-days-csv/mapped_student_employment_targets_v3.csv",
@@ -88,20 +88,20 @@
     }
   ],
   "timeline_gate": {
-    "as_of": "2026-10-01",
+    "as_of": "2027-03-01",
     "program_end": "2026-12-20",
     "filing_deadline": "2027-02-18",
     "opt_start_assumed": "2026-12-21",
     "hiring_lag_days": 60,
-    "earliest_offer": "2026-11-30",
+    "earliest_offer": "2027-04-30",
     "unemployment_days": 90,
-    "factor": 1,
-    "reason": "offer lands before OPT starts — no unemployment days used"
+    "factor": 0,
+    "reason": "OPT not filed and the filing window closed on 2027-02-18"
   },
   "scorer": {
     "ran": true,
-    "command": "node scripts/score/role-scorer.mjs course/2026fa/submissions/Arc-211/runs/triage/roles.json --out-dir course/2026fa/submissions/Arc-211/runs/triage",
-    "stdout": "✓ scored 4 roles → Apply 4 · Consider 0 · Skip 0 (skip 0%)\n  course/2026fa/submissions/Arc-211/runs/triage/role-scores.json  +  course/2026fa/submissions/Arc-211/runs/triage/role-scores.md"
+    "command": "node scripts/score/role-scorer.mjs course/2026fa/submissions/Arc-211/runs/breaks/after-deadline/roles.json --out-dir course/2026fa/submissions/Arc-211/runs/breaks/after-deadline",
+    "stdout": "✓ scored 4 roles → Apply 0 · Consider 0 · Skip 4 (skip 100%)\n  course/2026fa/submissions/Arc-211/runs/breaks/after-deadline/role-scores.json  +  course/2026fa/submissions/Arc-211/runs/breaks/after-deadline/role-scores.md"
   },
   "results": [
     {
@@ -168,7 +168,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 58,
+        "months_since": 63,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -192,9 +192,9 @@
         "source": "rule-based strong match on posting title \"Senior Data Engineer\""
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "confirmed",
@@ -203,12 +203,12 @@
       },
       "status": "scored",
       "score": {
-        "composite": 0.555,
-        "recommendation": "Apply",
-        "reason": "composite 0.555 ≥ 0.3, gates healthy",
-        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+        "composite": 0,
+        "recommendation": "Skip",
+        "reason": "gated: timeline ≈ 0.000 (a closed gate zeroes the composite regardless of votes)",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 0 = 0.000"
       },
-      "next_action": "tailor-application"
+      "next_action": "skip"
     },
     {
       "company": "GREEN DOT CORP",
@@ -274,8 +274,8 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 24,
-        "recent": true,
+        "months_since": 29,
+        "recent": false,
         "form_d_sample_hits": {
           "value": [],
           "label": "record",
@@ -298,9 +298,9 @@
         "source": "rule-based strong match on posting title \"Senior Data Analyst\""
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "confirmed",
@@ -309,12 +309,12 @@
       },
       "status": "scored",
       "score": {
-        "composite": 0.555,
-        "recommendation": "Apply",
-        "reason": "composite 0.555 ≥ 0.3, gates healthy",
-        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+        "composite": 0,
+        "recommendation": "Skip",
+        "reason": "gated: timeline ≈ 0.000 (a closed gate zeroes the composite regardless of votes)",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 0 = 0.000"
       },
-      "next_action": "tailor-application"
+      "next_action": "skip"
     },
     {
       "company": "GUARANTR INC",
@@ -381,7 +381,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 108,
+        "months_since": 113,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -400,18 +400,18 @@
         "source": "rule-based weak match on fallback — company's sponsored titles (Technical Business Analyst)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "HOULIHAN LOKEY INC",
@@ -497,18 +497,18 @@
         "source": "rule-based weak match on fallback — company's sponsored titles (Senior Business Analyst, HCG)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "MULLIGAN FUNDING LLC",
@@ -571,7 +571,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 41,
+        "months_since": 46,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -590,18 +590,18 @@
         "source": "rule-based weak match on fallback — company's sponsored titles (Data Scientist)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "PROSPER MARKETPLACE INC",
@@ -668,7 +668,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 137,
+        "months_since": 142,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -687,18 +687,18 @@
         "source": "rule-based weak match on fallback — company's sponsored titles (Credit Risk Analytics Senior Manager | Operations Analytics Manager)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "REMITLY INC",
@@ -766,7 +766,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 106,
+        "months_since": 111,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -790,9 +790,9 @@
         "source": "rule-based strong match on posting title \"Data Analyst\""
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "confirmed",
@@ -801,12 +801,12 @@
       },
       "status": "scored",
       "score": {
-        "composite": 0.555,
-        "recommendation": "Apply",
-        "reason": "composite 0.555 ≥ 0.3, gates healthy",
-        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+        "composite": 0,
+        "recommendation": "Skip",
+        "reason": "gated: timeline ≈ 0.000 (a closed gate zeroes the composite regardless of votes)",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 0 = 0.000"
       },
-      "next_action": "tailor-application"
+      "next_action": "skip"
     },
     {
       "company": "RYAN SPECIALTY GROUP LLC",
@@ -869,7 +869,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 72,
+        "months_since": 77,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -888,18 +888,18 @@
         "source": "rule-based strong match on fallback — company's sponsored titles (Data Analyst, Catastrophe Modeling)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "SIMPL INC",
@@ -962,7 +962,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 60,
+        "months_since": 64,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -981,18 +981,18 @@
         "source": "rule-based weak match on fallback — company's sponsored titles (Data Scientist)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "SOCIAL FINANCE INC",
@@ -1059,7 +1059,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 69,
+        "months_since": 73,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -1083,9 +1083,9 @@
         "source": "no target-role match on posting title \"Fraud Model Analyst\" — no fit vote"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "confirmed",
@@ -1094,12 +1094,12 @@
       },
       "status": "scored",
       "score": {
-        "composite": 0.315,
-        "recommendation": "Apply",
-        "reason": "composite 0.315 ≥ 0.3, gates healthy",
-        "arithmetic": "(0.9·0.35) × 1 × 1 = 0.315"
+        "composite": 0,
+        "recommendation": "Skip",
+        "reason": "gated: timeline ≈ 0.000 (a closed gate zeroes the composite regardless of votes)",
+        "arithmetic": "(0.9·0.35) × 1 × 0 = 0.000"
       },
-      "next_action": "review-role-fit"
+      "next_action": "skip"
     },
     {
       "company": "SOLAR MOSAIC INC",
@@ -1163,7 +1163,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 137,
+        "months_since": 142,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -1182,18 +1182,18 @@
         "source": "rule-based strong match on fallback — company's sponsored titles (Customer Experience (CX) Ops Data Analyst)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "UPSTART NETWORK INC",
@@ -1260,7 +1260,7 @@
           "label": "record",
           "source": "latest_funding_date (80 Days CSV)"
         },
-        "months_since": 164,
+        "months_since": 169,
         "recent": false,
         "form_d_sample_hits": {
           "value": [],
@@ -1279,18 +1279,18 @@
         "source": "rule-based strong match on fallback — company's sponsored titles (Data Engineer)"
       },
       "timeline": {
-        "value": 1,
+        "value": 0,
         "label": "your-input",
-        "source": "offer lands before OPT starts — no unemployment days used"
+        "source": "OPT not filed and the filing window closed on 2027-02-18"
       },
       "everify": {
         "value": "unknown",
         "label": "your-input",
         "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "timeline-closed",
+      "next_action": "skip",
+      "note": "timeline gate closed (OPT not filed and the filing window closed on 2027-02-18) — not worth checking the posting"
     },
     {
       "company": "JPMORGAN CHASE & CO",
