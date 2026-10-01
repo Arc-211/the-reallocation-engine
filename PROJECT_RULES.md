@@ -26,7 +26,7 @@ Explicit instructions from the human in chat override generated defaults.
 ## The rules in one breath (SNICKERDOODLE.md governs in full)
 
 1. Verified local data before external lookup; stored scripts before ad-hoc code.
-2. Never invent a count, rate, or confidence; label model judgments as judgments.
+2. Never invent a count, rate, or confidence; label model judgments as judgment.
 3. Gates are hard stops cleared by a named human and logged.
 4. Machines verify conformance; humans verify adequacy.
 5. Never delete source, data, recipes, or logs — archive instead.
