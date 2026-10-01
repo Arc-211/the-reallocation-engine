@@ -1,6 +1,6 @@
 {
   "_tool": "Arc-211-fin-dataeng-stemopt/triage.mjs",
-  "generated": "2026-10-01T18:16:04.468Z",
+  "generated": "2026-10-01T19:18:59.198Z",
   "as_of": "2026-10-01",
   "config": "scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/config.json",
   "inputs": {
@@ -99,8 +99,9 @@
     "reason": "offer lands before OPT starts — no unemployment days used"
   },
   "scorer": {
-    "ran": false,
-    "reason": "no candidate passed the pre-checks — scorer not called"
+    "ran": true,
+    "command": "node scripts/score/role-scorer.mjs course/2026fa/submissions/Arc-211/runs/triage/roles.json --out-dir course/2026fa/submissions/Arc-211/runs/triage",
+    "stdout": "✓ scored 4 roles → Apply 4 · Consider 0 · Skip 0 (skip 0%)\n  course/2026fa/submissions/Arc-211/runs/triage/role-scores.json  +  course/2026fa/submissions/Arc-211/runs/triage/role-scores.md"
   },
   "results": [
     {
@@ -143,10 +144,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Senior Analytics Engineer"
+        "source": "rule-based match on sponsored titles: Senior Analytics Engineer | Senior Data Scientist"
       },
       "salary": {
         "company_median_all_titles": {
@@ -176,9 +177,19 @@
         }
       },
       "liveness": {
-        "value": null,
+        "value": "active",
         "label": "record",
-        "source": "not checked"
+        "source": "ats:liveness on https://job-boards.greenhouse.io/embed/job_app?for=gemini&token=8076827 (2026-10-01), transcribed"
+      },
+      "posting_title": {
+        "value": "Senior Data Engineer",
+        "label": "your-input",
+        "source": "title of the posting the student checked"
+      },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on posting title \"Senior Data Engineer\""
       },
       "timeline": {
         "value": 1,
@@ -186,13 +197,18 @@
         "source": "offer lands before OPT starts — no unemployment days used"
       },
       "everify": {
-        "value": "unknown",
-        "label": "your-input",
-        "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
+        "value": "confirmed",
+        "label": "record",
+        "source": "E-Verify Employer Search \"Gemini\" (2026-10-01), transcribed: 1 matching record(s)"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "scored",
+      "score": {
+        "composite": 0.555,
+        "recommendation": "Apply",
+        "reason": "composite 0.555 ≥ 0.3, gates healthy",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+      },
+      "next_action": "tailor-application"
     },
     {
       "company": "GREEN DOT CORP",
@@ -234,10 +250,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Lead Engineer, Data Management | Professional 4, Business Intelligence"
+        "source": "rule-based match on sponsored titles: Lead Engineer, Data Management | Professional 4, Business Intelligence | Professional 3, Business Analytics"
       },
       "salary": {
         "company_median_all_titles": {
@@ -267,9 +283,19 @@
         }
       },
       "liveness": {
-        "value": null,
-        "label": "record",
-        "source": "not checked"
+        "value": "active",
+        "label": "your-input",
+        "source": "manual check of https://greendotcorp.wd1.myworkdayjobs.com/en-US/gdc/details/Senior-Data-Analyst_R4136?timeType=f9cf0075511801c7d457c183bf139500&locationCountry=bc33aa3152ec42d4995f4791a106ed09 (2026-10-01) — ats:liveness said expired (insufficient content — JS-rendered Workday page); student saw an Apply button in the browser on 2026-10-01 — checker false negative"
+      },
+      "posting_title": {
+        "value": "Senior Data Analyst",
+        "label": "your-input",
+        "source": "title of the posting the student checked"
+      },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on posting title \"Senior Data Analyst\""
       },
       "timeline": {
         "value": 1,
@@ -277,13 +303,18 @@
         "source": "offer lands before OPT starts — no unemployment days used"
       },
       "everify": {
-        "value": "unknown",
-        "label": "your-input",
-        "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
+        "value": "confirmed",
+        "label": "record",
+        "source": "E-Verify Employer Search \"Green Dot\" (2026-10-01), transcribed: 2 matching record(s) — same-brand non-matches excluded: Green Dot Public Schools; Escobar & Rascon (DBA Green Dot); GDS West Inc"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "scored",
+      "score": {
+        "composite": 0.555,
+        "recommendation": "Apply",
+        "reason": "composite 0.555 ≥ 0.3, gates healthy",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+      },
+      "next_action": "tailor-application"
     },
     {
       "company": "GUARANTR INC",
@@ -326,10 +357,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): Technical Business Analyst"
+        "source": "rule-based match on sponsored titles: Technical Business Analyst"
       },
       "salary": {
         "company_median_all_titles": {
@@ -362,6 +393,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.5,
+        "label": "model-judgment",
+        "source": "rule-based weak match on fallback — company's sponsored titles (Technical Business Analyst)"
       },
       "timeline": {
         "value": 1,
@@ -418,10 +454,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): Senior Business Analyst, HCG"
+        "source": "rule-based match on sponsored titles: Senior Business Analyst, HCG"
       },
       "salary": {
         "company_median_all_titles": {
@@ -454,6 +490,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.5,
+        "label": "model-judgment",
+        "source": "rule-based weak match on fallback — company's sponsored titles (Senior Business Analyst, HCG)"
       },
       "timeline": {
         "value": 1,
@@ -506,10 +547,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): Data Scientist"
+        "source": "rule-based match on sponsored titles: Data Scientist"
       },
       "salary": {
         "company_median_all_titles": {
@@ -542,6 +583,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.5,
+        "label": "model-judgment",
+        "source": "rule-based weak match on fallback — company's sponsored titles (Data Scientist)"
       },
       "timeline": {
         "value": 1,
@@ -598,10 +644,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): Credit Risk Analytics Senior Manager | Operations Analytics Manager"
+        "source": "rule-based match on sponsored titles: Credit Risk Analytics Senior Manager | Operations Analytics Manager"
       },
       "salary": {
         "company_median_all_titles": {
@@ -634,6 +680,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.5,
+        "label": "model-judgment",
+        "source": "rule-based weak match on fallback — company's sponsored titles (Credit Risk Analytics Senior Manager | Operations Analytics Manager)"
       },
       "timeline": {
         "value": 1,
@@ -691,10 +742,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): SENIOR ANALYST, MARKETING ANALYTICS"
+        "source": "rule-based match on sponsored titles: SENIOR ANALYST, MARKETING ANALYTICS"
       },
       "salary": {
         "company_median_all_titles": {
@@ -724,9 +775,19 @@
         }
       },
       "liveness": {
-        "value": null,
-        "label": "record",
-        "source": "not checked"
+        "value": "active",
+        "label": "your-input",
+        "source": "manual check of https://careers.remitly.com/job/23093591/data-analyst/?source=Remitly%20Careers%20Site (2026-10-01) — ats:liveness said uncertain (no apply control found); student saw an Apply button in the browser"
+      },
+      "posting_title": {
+        "value": "Data Analyst",
+        "label": "your-input",
+        "source": "title of the posting the student checked"
+      },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on posting title \"Data Analyst\""
       },
       "timeline": {
         "value": 1,
@@ -734,13 +795,18 @@
         "source": "offer lands before OPT starts — no unemployment days used"
       },
       "everify": {
-        "value": "unknown",
-        "label": "your-input",
-        "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
+        "value": "confirmed",
+        "label": "record",
+        "source": "E-Verify Employer Search \"Remitly\" (2026-10-01), transcribed: 3 matching record(s) — one older Remitly account is terminated; two are open"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "scored",
+      "score": {
+        "composite": 0.555,
+        "recommendation": "Apply",
+        "reason": "composite 0.555 ≥ 0.3, gates healthy",
+        "arithmetic": "(0.9·0.35 + 0.8·0.3) × 1 × 1 = 0.555"
+      },
+      "next_action": "tailor-application"
     },
     {
       "company": "RYAN SPECIALTY GROUP LLC",
@@ -779,10 +845,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Data Analyst, Catastrophe Modeling"
+        "source": "rule-based match on sponsored titles: Data Analyst, Catastrophe Modeling"
       },
       "salary": {
         "company_median_all_titles": {
@@ -815,6 +881,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on fallback — company's sponsored titles (Data Analyst, Catastrophe Modeling)"
       },
       "timeline": {
         "value": 1,
@@ -867,10 +938,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.5,
+      "sponsored_title_match": {
+        "value": "weak",
         "label": "model-judgment",
-        "source": "rule-based title match (weak): Data Scientist"
+        "source": "rule-based match on sponsored titles: Data Scientist"
       },
       "salary": {
         "company_median_all_titles": {
@@ -903,6 +974,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.5,
+        "label": "model-judgment",
+        "source": "rule-based weak match on fallback — company's sponsored titles (Data Scientist)"
       },
       "timeline": {
         "value": 1,
@@ -959,10 +1035,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Business Intelligence Manager, Relay"
+        "source": "rule-based match on sponsored titles: Business Intelligence Manager, Relay | Senior Director, Marketing Analytics and Data Science"
       },
       "salary": {
         "company_median_all_titles": {
@@ -992,9 +1068,19 @@
         }
       },
       "liveness": {
-        "value": null,
+        "value": "active",
         "label": "record",
-        "source": "not checked"
+        "source": "ats:liveness on https://www.sofi.com/careers/job/?gh_jid=7826869003&gh_src=6f00r5g63us (2026-10-01), transcribed"
+      },
+      "posting_title": {
+        "value": "Fraud Model Analyst",
+        "label": "your-input",
+        "source": "title of the posting the student checked"
+      },
+      "fit": {
+        "value": null,
+        "label": "model-judgment",
+        "source": "no target-role match on posting title \"Fraud Model Analyst\" — no fit vote"
       },
       "timeline": {
         "value": 1,
@@ -1002,13 +1088,18 @@
         "source": "offer lands before OPT starts — no unemployment days used"
       },
       "everify": {
-        "value": "unknown",
-        "label": "your-input",
-        "source": "[TODO: DATA SOURCE] no E-Verify data in repo"
+        "value": "confirmed",
+        "label": "record",
+        "source": "E-Verify Employer Search \"Social Finance\" (2026-10-01), transcribed: 4 matching record(s) — several SoFi entities enrolled; which entity would employ the student is unknown until an offer"
       },
-      "status": "needs-liveness-check",
-      "next_action": "check-posting-by-hand",
-      "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+      "status": "scored",
+      "score": {
+        "composite": 0.315,
+        "recommendation": "Apply",
+        "reason": "composite 0.315 ≥ 0.3, gates healthy",
+        "arithmetic": "(0.9·0.35) × 1 × 1 = 0.315"
+      },
+      "next_action": "review-role-fit"
     },
     {
       "company": "SOLAR MOSAIC INC",
@@ -1048,10 +1139,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Customer Experience (CX) Ops Data Analyst"
+        "source": "rule-based match on sponsored titles: Customer Experience (CX) Ops Data Analyst"
       },
       "salary": {
         "company_median_all_titles": {
@@ -1084,6 +1175,11 @@
         "value": null,
         "label": "record",
         "source": "not checked"
+      },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on fallback — company's sponsored titles (Customer Experience (CX) Ops Data Analyst)"
       },
       "timeline": {
         "value": 1,
@@ -1140,10 +1236,10 @@
         "label": "record",
         "source": "top_job_titles_sponsored (top titles only — not a full list)"
       },
-      "fit": {
-        "value": 0.8,
+      "sponsored_title_match": {
+        "value": "strong",
         "label": "model-judgment",
-        "source": "rule-based title match (strong): Data Engineer"
+        "source": "rule-based match on sponsored titles: Data Engineer"
       },
       "salary": {
         "company_median_all_titles": {
@@ -1177,6 +1273,11 @@
         "label": "record",
         "source": "not checked"
       },
+      "fit": {
+        "value": 0.8,
+        "label": "model-judgment",
+        "source": "rule-based strong match on fallback — company's sponsored titles (Data Engineer)"
+      },
       "timeline": {
         "value": 1,
         "label": "your-input",
@@ -1190,6 +1291,13 @@
       "status": "needs-liveness-check",
       "next_action": "check-posting-by-hand",
       "note": "no liveness check recorded — not sent to the scorer (it would default to 1.0)"
+    },
+    {
+      "company": "JPMORGAN CHASE & CO",
+      "csv": "data/80-days-to-stay/80-days-csv/mapped_student_employment_targets_v3.csv",
+      "status": "not-found",
+      "next_action": "not-in-data",
+      "note": "company not in the sponsorship CSV — no value invented"
     }
   ]
 }

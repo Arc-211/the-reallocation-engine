@@ -133,3 +133,45 @@ it is the median across **all** sponsored titles at that company, not the data r
   on Node 23, so the documented test command names the test file directly;
   `node scripts/pii-scan.mjs` reports one finding on `main` (an npm maintainer email inside
   `package-lock.json`), unrelated to this branch.
+- **2026-10-01 — human-gate inputs and the first scored run.** Liveness checked with
+  `npm run ats:liveness` (needed `npx playwright install chromium` first — not in the setup
+  steps). Raw output: `runs/liveness-2026-10-01{,b,c}.txt`. Findings: (1) a Workday *search*
+  page was reported `expired` ("search for jobs page is loaded") — the checker's verdict is
+  only as good as the URL; (2) the specific Green Dot posting was also reported `expired`
+  ("insufficient content") — possibly a false negative on a JS-rendered page, pending a human
+  look; (3) Remitly came back `uncertain` and the student confirmed an Apply button by eye, so
+  it is recorded `method: manual` and labeled your-input, not record; (4) Upstart's live
+  posting was IT Support Analyst — out of scope, not recorded; (5) **JPMorgan Chase is absent
+  from the 30,369-row CSV** under every name variant searched — F1 on a real company.
+- **2026-10-01 — design correction: fit was judged on the wrong thing.** The first scored run
+  gave SoFi fit 0.8 because the company once sponsored a "Business Intelligence Manager",
+  while the posting checked was "Fraud Model Analyst". Fit now uses the posting title when
+  one is recorded and falls back to sponsored titles only when it is not (and says so).
+  New test added. Result after the fix: SoFi has no fit vote, composite 0.315.
+- **2026-10-01 — open question found:** a Proven sponsor alone (0.9 × 0.35 = 0.315) clears the
+  scorer's 0.3 Apply threshold with **no fit vote at all** — so SoFi's off-target posting is
+  still "Apply". This is the shipped scorer's threshold, not changed here.
+- **2026-10-01 — Green Dot was a checker false negative.** The student opened the posting
+  and saw an Apply button; `ats:liveness` had said `expired` ("insufficient content"). Now
+  recorded `method: manual`, labeled your-input. Had the checker been trusted, a Proven
+  sponsor with a live, on-target posting would have been routed to "network" instead of
+  "apply". SoFi's Apply button was also confirmed by eye (agrees with the checker).
+- **2026-10-01 — rule added (student decision):** when the scorer says Apply/Consider but the
+  posting has **no fit vote**, the next action is `review-role-fit`, not an application.
+  The shipped scorer is unchanged; the rule lives in the prototype. Tested.
+- **2026-10-01 — E-Verify gate.** A first answer arrived as a chatbot-style table marking all
+  four employers "Verified Enrolled" on the strength of H-1B/PERM history and vague "profiles".
+  **Rejected:** visa sponsorship is not E-Verify enrollment, and no cited source was checkable.
+  The real lookup was then done in the official E-Verify Employer Search (Date Enrolled widened
+  from the default "This year" to "Last 30 years" — the default would have hidden every older
+  enrollment). All four found Open; details and caveats in `inputs/everify.json`: SoFi has four
+  enrolled entities; one older Remitly account is terminated; "Green Dot" also matches unrelated
+  organizations (Green Dot Public Schools, a DBA of Escobar & Rascon). Labeled `record`
+  (government database, transcribed) — distinct from a bare claim, which stays your-input.
+- **2026-10-01 — final sample run:** 13 evaluated → tailor-application 3 (Gemini, Green Dot,
+  Remitly), review-role-fit 1 (SoFi), check-posting-by-hand 8, not-in-data 1 (JPMorgan).
+- **2026-10-01 — recipe written; status decision.** Recipe and card added under
+  `recipes/cases/2026fa/`. Status set to **DRAFT** by the student's choice: a sample run
+  completed, but the three proposed additions remain typed TODOs, and the lifecycle requires
+  zero open TODOs before SPECIFIED. Run-log entry `logs/runs/2026fa-Arc-211-1.md` added, with
+  G4 reviewer confirmation and the G5 decision marked pending.

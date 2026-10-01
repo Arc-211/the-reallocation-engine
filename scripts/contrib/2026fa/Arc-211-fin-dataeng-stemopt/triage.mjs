@@ -143,6 +143,8 @@ if (Array.isArray(cfg.candidates) && cfg.candidates.length) {
     industry_rows: ind.length, industry_rows_with_h1b: withH.length,
     industry_rows_h1b_blank: ind.length - withH.length, title_matched: matched.length });
   candidates = matched.map((r) => ({ name: r.company_name, row: r }));
+  for (const name of cfg.extra_candidates || []) // your-input additions on top of the auto list
+    if (!candidates.some((c) => norm(c.name) === norm(name))) candidates.push({ name, row: byName.get(norm(name)) || null });
 }
 
 // ── per-candidate evidence ───────────────────────────────────────────────────
@@ -170,9 +172,9 @@ const evaluated = candidates.map(({ name, row }) => {
   const titles = titlesOf(row);
   const strong = titles.filter((t) => strongRe.test(t)); const weak = titles.filter((t) => !strongRe.test(t) && weakRe.test(t));
   e.sponsored_titles = v(titles, L.record, 'top_job_titles_sponsored (top titles only — not a full list)');
-  e.fit = strong.length ? v(cfg.fit.strong_p, L.model, `rule-based title match (strong): ${strong.join(' | ')}`)
-    : weak.length ? v(cfg.fit.weak_p, L.model, `rule-based title match (weak): ${weak.join(' | ')}`)
-      : v(null, L.model, 'no sponsored title matched the target roles');
+  // which of the company's past sponsored titles look like the target role (evidence about sponsorship, not fit)
+  e.sponsored_title_match = v(strong.length ? 'strong' : weak.length ? 'weak' : 'none', L.model,
+    `rule-based match on sponsored titles: ${[...strong, ...weak].join(' | ') || 'none'}`);
 
   // salary floor — applied OUTSIDE the scorer (role_quality weight is 0.0)
   const med = num(row.median_salary_offered);
@@ -189,10 +191,25 @@ const evaluated = candidates.map(({ name, row }) => {
 
   // gates
   const lv = lookup(liveness, name);
-  e.liveness = lv ? v(lv.result, L.record, `ats:liveness on ${lv.url} (${lv.checked_on}), transcribed`) : v(null, L.record, 'not checked');
+  // method "manual" = the student looked at the page: their observation, not a checker record
+  e.liveness = !lv ? v(null, L.record, 'not checked')
+    : lv.method === 'manual' ? v(lv.result, L.input, `manual check of ${lv.url} (${lv.checked_on})${lv.note ? ` — ${lv.note}` : ''}`)
+      : v(lv.result, L.record, `ats:liveness on ${lv.url} (${lv.checked_on}), transcribed`);
+  if (lv?.posting_title) e.posting_title = v(lv.posting_title, L.input, 'title of the posting the student checked');
+
+  // fit — rule-based title match; a judgment, not a record. Judged on the POSTING when one is recorded;
+  // otherwise falls back to the company's sponsored titles (a weaker proxy, said so in the source).
+  const fitOn = (t) => (strongRe.test(t) ? 'strong' : weakRe.test(t) ? 'weak' : 'none');
+  const fitLevel = e.posting_title ? fitOn(e.posting_title.value) : e.sponsored_title_match.value;
+  const fitBasis = e.posting_title ? `posting title "${e.posting_title.value}"` : `fallback — company's sponsored titles (${e.sponsored_title_match.source.split(': ')[1]})`;
+  e.fit = fitLevel === 'none' ? v(null, L.model, `no target-role match on ${fitBasis} — no fit vote`)
+    : v(cfg.fit[`${fitLevel}_p`], L.model, `rule-based ${fitLevel} match on ${fitBasis}`);
   e.timeline = v(tl.factor, L.input, tl.reason);
   const ev = lookup(everify, name);
-  e.everify = ev ? v(ev.status, L.input, `manual lookup ${ev.checked_on || ''}`.trim()) : v('unknown', L.input, '[TODO: DATA SOURCE] no E-Verify data in repo');
+  // method "e-verify.gov" = a government record transcribed by hand; anything else is the student's own claim
+  e.everify = !ev ? v('unknown', L.input, '[TODO: DATA SOURCE] no E-Verify data in repo')
+    : ev.method === 'e-verify.gov' ? v(ev.status, L.record, `E-Verify Employer Search "${ev.search_term}" (${ev.checked_on}), transcribed: ${(ev.matched || []).length} matching record(s)${ev.caveat ? ` — ${ev.caveat}` : ''}`)
+      : v(ev.status, L.input, `manual claim ${ev.checked_on || ''}`.trim());
 
   if (e.salary.check === 'below-floor') return { ...e, status: 'below-floor', next_action: 'skip' };
   if (!lv || lv.result === 'uncertain') return { ...e, status: 'needs-liveness-check', next_action: 'check-posting-by-hand',
@@ -204,11 +221,11 @@ const evaluated = candidates.map(({ name, row }) => {
 fs.mkdirSync(outDir, { recursive: true });
 const toScore = evaluated.filter((e) => e.status === 'scored');
 const roles = toScore.map((e) => ({
-  role_id: norm(e.company), company: e.company, title: 'Data engineer / BI analyst',
+  role_id: norm(e.company), company: e.company, title: e.posting_title?.value || 'Data engineer / BI analyst (no posting title recorded)',
   sponsorship: { p: e.sponsorship.p.value, tier: e.sponsorship.tier.value, source: L.record,
     derivation: `approvals ${e.sponsorship.approvals.value}, rate ${e.sponsorship.approval_rate.value}% [record] → tier/p by your-input rule` },
   ...(e.fit.value != null ? { fit: { p: e.fit.value, source: L.model } } : {}),
-  liveness: { factor: e.liveness.value === 'active' ? 1 : 0, source: L.record },
+  liveness: { factor: e.liveness.value === 'active' ? 1 : 0, source: e.liveness.label },
   timeline: { factor: tl.factor, source: L.input },
 }));
 const rolesPath = path.join(outDir, 'roles.json');
@@ -223,7 +240,8 @@ if (roles.length) {
     const e = toScore.find((x) => norm(x.company) === r.role_id);
     e.score = { composite: r.composite, recommendation: r.recommendation, reason: r.reason, arithmetic: r.trace?.arithmetic };
     const strongSponsor = e.sponsorship.tier.value === 'Proven';
-    if (r.recommendation === 'Skip') e.next_action = e.liveness.value === 'expired' && strongSponsor ? 'network-into-company' : 'skip';
+    if (r.recommendation !== 'Skip' && e.fit.value == null) e.next_action = 'review-role-fit'; // your-input rule: sponsorship alone can clear 0.3
+    else if (r.recommendation === 'Skip') e.next_action = e.liveness.value === 'expired' && strongSponsor ? 'network-into-company' : 'skip';
     else if (e.everify.value === 'not-enrolled') e.next_action = 'network-only (no E-Verify → STEM extension impossible)';
     else if (e.everify.value === 'confirmed') e.next_action = 'tailor-application';
     else e.next_action = 'verify-everify-then-tailor';
@@ -247,7 +265,7 @@ lines.push(`# Finance data-engineering triage — ${iso(asOf)}`, '', '## Executi
   `This report sorts ${evaluated.length} employer(s) into what to do next for a STEM-OPT master's graduate targeting data-engineering and business-intelligence roles. ` +
   `Each employer was checked against past visa-sponsorship records, the job titles it actually sponsored, its recorded pay level, recent funding, and the visa calendar. ` +
   `Result: ${count('tailor-application') + count('verify-everify-then-tailor')} worth tailoring an application to (after an E-Verify check where unknown), ` +
-  `${count('network-into-company')} to network into, ${count('check-posting-by-hand')} whose job posting still needs checking by hand, ` +
+  `${count('review-role-fit')} where the posting itself may not be a target role, ${count('network-into-company')} to network into, ${count('check-posting-by-hand')} whose job posting still needs checking by hand, ` +
   `and ${count('skip')} to skip. Nothing here is a hiring prediction; every number below says where it came from, and the final call is yours.`, '');
 lines.push('## Run record', '', `- As of: ${iso(asOf)} · data mode: **sample** (Form D = shipped samples only)`,
   `- Sponsorship CSV: \`${cfg.paths.sponsors_csv}\``, `- Scorer: ${scorer.ran ? `\`${scorer.command}\`` : scorer.reason}`, '');
@@ -261,16 +279,16 @@ lines.push('### Visa-timeline gate (all your-input)', '', `- Program end ${tl.pr
   `- **Factor ${tl.factor}** — ${tl.reason}`, '');
 lines.push('### Target occupations (BLS national median, record)', '', ...socs.map((s) => s.status === 'ok'
   ? `- ${s.soc} ${s.title}: ${fmt$(s.median.value)}` : `- ${s.soc}: **missing** (${s.reason}) — no value used`), '');
-lines.push('## Decisions', '', '| Company | Next action | Score | Sponsorship [record → your-input tier] | Fit [model-judgment] | Liveness [record] | E-Verify [your-input] | Pay median, all titles [record] | Latest funding [record] |',
+lines.push('## Decisions', '', '| Company | Next action | Score | Sponsorship [record → your-input tier] | Fit [model-judgment] | Liveness [label] | E-Verify [label] | Pay median, all titles [record] | Latest funding [record] |',
   '|---|---|---|---|---|---|---|---|---|');
 for (const e of evaluated) {
   const s = e.sponsorship;
   lines.push(`| ${e.company} | **${e.next_action}** | ${e.score ? `${e.score.composite.toFixed(3)} ${e.score.recommendation}` : `— (${e.status})`} | ` +
-    `${s ? `${s.approvals.value} appr, ${s.approval_rate.value?.toFixed(1)}% → ${s.tier.value}` : '—'} | ${e.fit?.value ?? '—'} | ${e.liveness?.value ?? '—'} | ${e.everify?.value ?? '—'} | ` +
+    `${s ? `${s.approvals.value} appr, ${s.approval_rate.value?.toFixed(1)}% → ${s.tier.value}` : '—'} | ${e.fit?.value ?? '—'} | ${e.liveness?.value ? `${e.liveness.value} [${e.liveness.label}]` : '—'} | ${e.everify?.value ? `${e.everify.value} [${e.everify.label}]` : '—'} | ` +
     `${e.salary ? `${fmt$(e.salary.company_median_all_titles.value)} (${e.salary.check})` : '—'} | ${e.funding?.latest_funding_date.value ?? '—'} |`);
 }
 lines.push('', '## Why each row', '');
-for (const e of evaluated) lines.push(`- **${e.company}** — ${e.score ? `${e.score.reason}; ${e.score.arithmetic}` : e.note || e.status}` +
+for (const e of evaluated) lines.push(`- **${e.company}**${e.posting_title ? ` (posting: ${e.posting_title.value}; liveness ${e.liveness.label})` : ''} — ${e.score ? `${e.score.reason}; ${e.score.arithmetic}` : e.note || e.status}` +
   `${e.fit?.source ? `. Fit: ${e.fit.source}` : ''}`);
 lines.push('', '## What this run could not verify', '',
   '- **E-Verify enrollment** — no data in the repo; every "unknown" must be looked up by hand before tailoring (gate G4).',
@@ -282,7 +300,7 @@ lines.push('', '## What this run could not verify', '',
 fs.writeFileSync(path.join(outDir, 'triage-report.md'), lines.join('\n'));
 
 console.log(`✓ triage ${iso(asOf)}: ${evaluated.length} evaluated → ` +
-  ['tailor-application', 'verify-everify-then-tailor', 'network-into-company', 'check-posting-by-hand', 'research-sponsorship', 'not-in-data', 'skip']
+  ['tailor-application', 'verify-everify-then-tailor', 'review-role-fit', 'network-into-company', 'check-posting-by-hand', 'research-sponsorship', 'not-in-data', 'skip']
     .map((k) => `${k} ${count(k)}`).join(' · '));
 console.log(`  timeline factor ${tl.factor} (${tl.reason})`);
 console.log(`  ${path.relative(REPO, path.join(outDir, 'triage-log.json'))}  +  ${path.relative(REPO, path.join(outDir, 'triage-report.md'))}`);

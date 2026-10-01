@@ -111,3 +111,56 @@ test('G1: a missing input file exits 2 and writes nothing', () => {
   assert.equal(r.status, 2); assert.match(r.stderr, /G1 input missing/);
   assert.ok(!fs.existsSync(r.out));
 });
+
+test('manual liveness check is labeled your-input, not record, all the way into roles.json', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arc211-live-'));
+  const lv = path.join(dir, 'liveness.json');
+  fs.writeFileSync(lv, JSON.stringify({ 'EXAMPLE CREDIT INC': { url: 'https://boards.example.com/credit', result: 'active',
+    method: 'manual', checked_on: '2026-10-01', posting_title: 'Analytics Engineer' } }));
+  const r = run({ paths: { ...BASE.paths, liveness_json: lv } });
+  const e = row(r.log, 'EXAMPLE CREDIT INC');
+  assert.equal(e.liveness.label, 'your-input');
+  const role = r.roles.find((x) => x.company === 'EXAMPLE CREDIT INC');
+  assert.equal(role.liveness.source, 'your-input');
+  assert.equal(role.title, 'Analytics Engineer');
+});
+
+test('extra_candidates: a real-world name absent from the CSV is reported not-found alongside the auto list', () => {
+  const r = run({ extra_candidates: ['BIG BANK NOT IN DATA'] });
+  assert.equal(row(r.log, 'BIG BANK NOT IN DATA').next_action, 'not-in-data');
+  assert.ok(row(r.log, 'EXAMPLE LEDGER INC'), 'auto list still present');
+});
+
+test('fit is judged on the posting title, not the company\'s past sponsored titles', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arc211-fit-'));
+  const lv = path.join(dir, 'liveness.json');
+  // EXAMPLE LEDGER INC sponsored "Data Engineer" in the past — but this posting is not a target role
+  fs.writeFileSync(lv, JSON.stringify({ 'EXAMPLE LEDGER INC': { url: 'https://boards.example.com/ledger/x', result: 'active',
+    method: 'ats:liveness', checked_on: '2026-10-01', posting_title: 'Fraud Investigator' } }));
+  const r = run({ paths: { ...BASE.paths, liveness_json: lv } });
+  const e = row(r.log, 'EXAMPLE LEDGER INC');
+  assert.equal(e.fit.value, null);
+  assert.equal(e.sponsored_title_match.value, 'strong');
+  assert.equal(r.roles.find((x) => x.company === 'EXAMPLE LEDGER INC').fit, undefined);
+});
+
+test('no fit vote → review-role-fit even when sponsorship alone clears the Apply threshold', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arc211-nofit-'));
+  const lv = path.join(dir, 'liveness.json');
+  fs.writeFileSync(lv, JSON.stringify({ 'EXAMPLE LEDGER INC': { url: 'https://boards.example.com/ledger/x', result: 'active',
+    method: 'ats:liveness', checked_on: '2026-10-01', posting_title: 'Fraud Investigator' } }));
+  const e = row(run({ paths: { ...BASE.paths, liveness_json: lv } }).log, 'EXAMPLE LEDGER INC');
+  assert.equal(e.score.recommendation, 'Apply'); // the shipped scorer's verdict: 0.9 × 0.35 = 0.315 ≥ 0.3
+  assert.equal(e.next_action, 'review-role-fit'); // this recipe's rule on top of it
+});
+
+test('E-Verify: a transcribed e-verify.gov lookup is a record; a bare claim stays your-input', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arc211-ev-'));
+  const ev = path.join(dir, 'everify.json');
+  fs.writeFileSync(ev, JSON.stringify({
+    'EXAMPLE LEDGER INC': { status: 'confirmed', method: 'e-verify.gov', checked_on: '2026-10-01', search_term: 'Example Ledger', matched: ['Example Ledger, Inc. — Open'] },
+    'EXAMPLE BANK CORP': { status: 'confirmed', checked_on: '2026-10-01' } }));
+  const { log } = run({ paths: { ...BASE.paths, everify_json: ev } });
+  assert.equal(row(log, 'EXAMPLE LEDGER INC').everify.label, 'record');
+  assert.equal(row(log, 'EXAMPLE BANK CORP').everify.label, 'your-input');
+});
