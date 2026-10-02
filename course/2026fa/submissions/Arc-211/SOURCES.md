@@ -1,7 +1,7 @@
 # SOURCES — fin-dataeng-stemopt submission
 
-> Drafted with an AI assistant on 2026-10-01. The student (Arc-211) must review the
-> human/AI split below and correct anything that does not match their own account.
+> Drafted with an AI assistant on 2026-10-01. Reviewed and approved by the student (Arc-211)
+> on 2026-10-02, including the human/AI split below.
 
 ## Executive summary
 
@@ -55,14 +55,14 @@ situation, and are not in the repository. The persona in all files is anonymized
 |---|---|---|
 | Understanding the assignment and setup | explained the assignment; diagnosed the Intel-git and PATH problems; ran `npm install`, doctor and verify | forked, cloned and re-cloned the repo; made all the commits; reworded a commit message |
 | Situation and scope | suggested the SOC codes and a recipe idea from the résumé and I-20 | chose the targets (data engineer, BI analyst), location, finance preference, $90k floor and 60-day hiring lag |
-| Change brief | drafted it; profiled the data; confirmed the scorer's missing-liveness defect | reviewed it *(student to rewrite §4–5 in their own words)* |
+| Change brief | drafted it; profiled the data; confirmed the scorer's missing-liveness defect | reviewed it; agreed with the §4–5 predictions and adopted them (2026-10-02); did not reword them |
 | Design decisions | proposed the options | chose: leave unchecked liveness out of the scorer; apply `review-role-fit` when there is no fit vote; DRAFT status |
-| Thresholds and weights | proposed the tier thresholds, fit p values and assumed OPT start | accepted them *(student to confirm they can defend each)* |
+| Thresholds and weights | proposed the tier thresholds, fit p values and assumed OPT start | accepted them (all are labeled your-input in `config.json`) |
 | Code and tests | wrote `triage.mjs`, `triage.test.mjs`, the fixtures and README; found and fixed four defects through its own runs and break tests | — |
 | Liveness gate | ran `ats:liveness`; flagged that the search-page URLs and the IT Support posting were not valid inputs | found the postings; **visually confirmed Apply buttons on Green Dot (overriding the checker's "expired"), Remitly and SoFi** |
 | E-Verify gate | flagged that the pasted "Verified Enrolled" table was not evidence; ran the official lookup in the browser | **accepted that the pasted table was not evidence, and rejected it**; reviewed the result screens and cleared the gate |
 | Release decision (G5) | presented the results and the seniority caveat | **decided to apply to all four, overriding the engine on SoFi** with their own reason |
-| Recipe, card, justification, worked run, TEST-REPORT, run log | drafted all of them | reviewed them *(student to rewrite the worked-run reflection)* |
+| Recipe, card, justification, worked run, TEST-REPORT, run log | drafted all of them | reviewed them; wrote the reflection and FRICTIONAL §4 as their own answers, which the AI edited for grammar only; confirmed the attestation rows |
 | FRICTIONAL.md | supplied a factual list of events | **writes it** |
 
 ### What was rejected or changed

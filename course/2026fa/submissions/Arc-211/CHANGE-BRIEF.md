@@ -1,9 +1,9 @@
 # CHANGE-BRIEF — Finance data-engineering triage for a STEM-OPT master's graduate
 
 > **Draft status:** first version drafted with an AI assistant on 2026-10-01 from the
-> student's stated situation and a read of the repo's data. **The student must review,
-> reword, and own every prediction below before committing.** Later revisions are
-> appended under "Revisions" — the original predictions are never rewritten.
+> student's stated situation and a read of the repo's data. **Reviewed by Arc-211 on 2026-10-02,
+> who agreed with the predictions in §4–§5 and adopts them as their own.** Later revisions are
+> appended under "Revisions"; the original predictions are never rewritten.
 
 ## Executive summary
 

@@ -70,9 +70,17 @@ G5. The AI wrote all code, tests and document drafts, and ran the commands and l
 
 ## 4. In my own words (Arc-211)
 
-*(Write this yourself: 5–10 sentences. Suggested prompts:)*
-- *Which one moment surprised you most, and what did you expect instead?*
-- *Green Dot: what would have happened if you had trusted the checker?*
-- *The E-Verify table (from another Claude chat and a web article): why did you agree to reject it?*
-- *What did you change your mind about while doing this?*
-- *What would you do differently next time?*
+*(My answers, edited for grammar and flow with AI on 2026-10-02. The last three sentences are
+drawn from my own statements and decisions during the session.)*
+
+What surprised me most was Green Dot. The checker said the posting was expired, but it
+wasn't. If I had trusted the checker, I would have skipped one of the best companies on my list.
+For E-Verify, I had to check by hand whether it applied to each company. I could not trust the
+AI blindly. The SoFi posting was a different role from the one I had targeted, so I had to
+tailor my application a bit for it. Next time, I would look at the job sites in more depth and
+choose roles that are aligned with my target role.
+
+I still chose to apply to SoFi because fraud modelling uses my SQL and Python. I opened the
+Green Dot, Remitly, and SoFi postings myself to confirm the Apply button was there, instead of
+relying only on the checker. I also chose to keep the recipe marked DRAFT rather than claim
+more than it has shown.

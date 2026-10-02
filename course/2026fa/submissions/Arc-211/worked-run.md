@@ -1,8 +1,8 @@
 # Worked run — finance data-engineering triage, 2026-10-01
 
 > Drafted with an AI assistant from this session's real runs; every block of terminal output
-> below is pasted from saved files in `runs/`, not retyped. The reflection must be reviewed and
-> rewritten by the student (Arc-211) in their own words before submission.
+> is pasted from saved files in `runs/`, not retyped. Reviewed by Arc-211 on 2026-10-02: the
+> reflection is Arc-211's own answers (edited for grammar), and the attestation rows were confirmed.
 
 ## Executive summary
 
@@ -164,6 +164,17 @@ exit 0          ("SOCAIL FINANCE INC" → not-in-data)
 
 ## Reflection
 
+### In my own words (Arc-211; my answers, edited for grammar and flow with AI on 2026-10-02)
+
+What surprised me most was Green Dot. The checker said the posting was expired, but it
+wasn't. If I had trusted the checker, I would have skipped one of the best companies on my list.
+For E-Verify, I had to check by hand whether it applied to each company. I could
+not trust the AI blindly. The SoFi posting was a different role from the one I had targeted, so I
+had to tailor my application a bit for it. Next time, I would look at the job sites in more
+depth and choose roles that are aligned with my target role.
+
+### Technical review of the run (compiled by the AI assistant from the run record)
+
 **What worked.** Labeling every value made the weak points obvious. The only three
 `your-input` liveness and preference rows are exactly the places a person had to step in.
 Refusing to send an unchecked posting to the scorer mattered: the scorer itself would have
@@ -194,7 +205,7 @@ JPMorgan's, without ever auto-correcting.
 
 ## Attestation
 - Recipe: Arc-211-fin-dataeng-stemopt v0.1.0
-- By: Arc-211 · 2026-10-01 *(student to confirm by reviewing this section)*
+- By: Arc-211 · 2026-10-01 (rows reviewed and confirmed by Arc-211 on 2026-10-02)
 
 ### Tested
 | Ran | Saw | Expected |

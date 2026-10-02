@@ -1,7 +1,7 @@
 # Domain justification — finance data-engineering triage for a STEM-OPT graduate
 
-> Drafted with an AI assistant on 2026-10-01 from this session's work; to be reviewed and
-> reworded by the student (Arc-211) before submission.
+> Drafted with an AI assistant on 2026-10-01 from this session's work. Reviewed and approved
+> by the student (Arc-211) on 2026-10-02.
 
 ## Executive summary
 
