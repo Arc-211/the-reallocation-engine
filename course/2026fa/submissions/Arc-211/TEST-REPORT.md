@@ -186,3 +186,20 @@ The script cannot decide these; it only labels them:
 - **The visa rules themselves.** The filing window, unemployment days and STEM eligibility are
   your-input as the student understands them. They must be confirmed with the school's
   international office.
+
+## 9. Addendum (2026-10-02): re-test from a clone of GitHub
+
+This closes the "cloned from local" caveat above. After the branch was pushed, it was cloned
+fresh **from GitHub** (`git clone --branch contrib/2026fa-Arc-211-fin-dataeng-stemopt
+https://github.com/Arc-211/the-reallocation-engine.git`) at commit `e7119c0`, and the same checks
+were run. Raw output is in `runs/github-clone/`; the npm maintainer email is redacted, as in §6.
+
+| Check | Result |
+|---|---|
+| `npm install` → `npm run doctor` | exit 0; ✓ no private/PII paths are tracked |
+| `npm run verify` | ✓ all conform; manifest passed (3 warnings, unchanged) |
+| `node scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/triage.mjs --as-of 2026-10-01` | exit 0; 13 evaluated → tailor-application 3 · review-role-fit 1 · check-posting-by-hand 8 · not-in-data 1 |
+| `node --test scripts/contrib/2026fa/Arc-211-fin-dataeng-stemopt/triage.test.mjs` | 18 pass, 0 fail |
+| `node scripts/pii-scan.mjs --diff <upstream main>` | `pii-scan: clean ✓` |
+| `triage-report.md`, `roles.json` vs commit | identical |
+| Changed files vs upstream `main` | 63, all inside the student's namespaces |
